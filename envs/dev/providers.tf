@@ -21,3 +21,6 @@ provider "aws" {
         }
     }
 }
+
+#default_tags — Every resource Terraform creates will automatically get these tags. 
+#This makes it easy to find and filter resources in the AWS Console and calculate costs per project/environment.
