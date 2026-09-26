@@ -20,17 +20,17 @@ variable "vpc_cidr" {
     default     = "10.0.0.0/16"
 }
 
-variable "public_subnet_cidr" {
+variable "public_subnet_cidrs" {
     description = "Public Subnet CIDR Block"
     type        = list(string)
 }
 
-variable "private_subnet_cidr" {
+variable "private_subnet_cidrs" {
     description = "Private Subnet CIDR Block"
     type        = list(string)
 }
 
-variable database_subnet_cidr {
+variable "database_subnet_cidrs" {
     description = "Database Subnet CIDR Block"
     type        = list(string)
 }
