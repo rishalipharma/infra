@@ -78,7 +78,7 @@ module "iam" {
 }
 
 module "secrets_manager" {
-  source = "../../modules/secret_manager"
+  source = "../../modules/secrets-manager"
 
   project = local.project
   env = local.env
