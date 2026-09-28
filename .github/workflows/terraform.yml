@@ -10,11 +10,14 @@ on:
     paths:
       - 'envs/dev/**'
       - 'modules/**'
+#This fires when someone pushes (or merges a PR) to main, but only if the changed files are under envs/dev/ or modules/
   pull_request:
     branches: [main]
     paths:
       - 'envs/dev/**'
       - 'modules/**'
+#This fires when a PR targeting main is opened, updated, or reopened. We use this to run terraform plan so reviewers can see what will change before merging.
+
   workflow_dispatch:
     inputs:
       action:
@@ -27,6 +30,7 @@ on:
         description: 'Type "destroy" to confirm destruction (required when action=destroy)'
         required: false
         default: ''
+#We use this for manual operations like destroying infrastructure.
 
 permissions:
   contents: read
@@ -50,7 +54,7 @@ jobs:
         working-directory: envs/dev
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Setup Terraform ${{ env.TF_VERSION }}
         uses: hashicorp/setup-terraform@v4
@@ -198,3 +202,5 @@ jobs:
         if: failure() || cancelled()
         run: |
           aws s3 rm s3://${{ vars.TF_STATE_BUCKET }}/envs/dev/terraform.tfstate.tflock || true
+
+# dummy line added here 
