@@ -13,6 +13,7 @@
 import os
 import subprocess
 import sys
+import shutil
 from datetime import datetime
 
 # Default project root is two levels above this script (infra/scripts/ → project root)
@@ -78,11 +79,19 @@ def prompt(var_name, label, example, default=""):
 # ---------------------------------------------------------------------------
 # Verify required tools are installed
 # ---------------------------------------------------------------------------
+# print()
+# print("Checking required tools...")
+# for tool in ["kubectl", "helm", "aws"]:
+#     rc = subprocess.run(["which", tool], capture_output=True).returncode
+#     if rc != 0:
+#         die(f"{tool} not found. Install it before running this script.")
+# log("kubectl, helm, and aws CLI found.")
+
+
 print()
 print("Checking required tools...")
 for tool in ["kubectl", "helm", "aws"]:
-    rc = subprocess.run(["which", tool], capture_output=True).returncode
-    if rc != 0:
+    if shutil.which(tool) is None:
         die(f"{tool} not found. Install it before running this script.")
 log("kubectl, helm, and aws CLI found.")
 
@@ -111,7 +120,7 @@ AWS_REGION          = prompt("AWS_REGION",          "AWS region where the cluste
                              "us-east-1", "us-east-1")
 ALB_CONTROLLER_ROLE = prompt("ALB_CONTROLLER_ROLE", "IAM role ARN for the AWS Load Balancer Controller",
                              "arn:aws:iam::<aws-account-id>:role/pharma-dev-alb-controller-role",
-                             "arn:aws:iam::873135413040:role/pharma-dev-alb-controller-role")
+                             "arn:aws:iam::413027378621:role/pharma-dev-alb-controller-role")
 
 default_gitops = os.path.join(DEFAULT_PROJECT_ROOT, "gitops")
 GITOPS_PATH         = prompt("GITOPS_PATH",         "Local path to your gitops repo",
