@@ -32,9 +32,9 @@ module "eks" {
 
     eks_managed_node_groups = {
         eks_nodes = {
-            desired_capacity = var.desired_size
-            min_capacity     = var.min_size
-            max_capacity     = var.max_size
+            desired_size = var.desired_size
+            min_size     = var.min_size
+            max_size     = var.max_size
 
             instance_types = var.instance_types
 
