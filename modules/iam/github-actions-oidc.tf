@@ -10,6 +10,8 @@
 #   3. AWS validates the token against the registered OIDC provider and
 #      issues temporary STS credentials (valid for 1 hour max)
 
+# ─── GitHub Actions OIDC Federation ─────────────────────────────────────────
+
 resource "aws_iam_openid_connect_provider" "github_actions" {
   url = "https://token.actions.githubusercontent.com"
 
@@ -46,10 +48,6 @@ data "aws_iam_policy_document" "github_actions_assume_role" {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
       values = [
-        # "repo:${var.github_org}/frontend:ref:refs/heads/main",
-        # "repo:${var.github_org}/frontend:ref:refs/heads/develop",
-        # "repo:${var.github_org}/backend:ref:refs/heads/main",
-        # "repo:${var.github_org}/backend:ref:refs/heads/develop",
         "repo:${var.github_org}/frontend:*",
         "repo:${var.github_org}/backend:*",
       ]
@@ -77,9 +75,9 @@ resource "aws_iam_policy" "github_actions_ci_policy" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid    = "ECRAuth"
-        Effect = "Allow"
-        Action = ["ecr:GetAuthorizationToken"]
+        Sid      = "ECRAuth"
+        Effect   = "Allow"
+        Action   = ["ecr:GetAuthorizationToken"]
         Resource = "*"
       },
       {
@@ -116,6 +114,3 @@ resource "aws_iam_role_policy_attachment" "github_actions_ci_policy_attachment" 
   role       = aws_iam_role.github_actions_ci.name
   policy_arn = aws_iam_policy.github_actions_ci_policy.arn
 }
-
-
-#Test comment added here
