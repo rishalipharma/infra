@@ -13,6 +13,7 @@ import os
 import subprocess
 import sys
 import time
+import shutil
 from datetime import datetime
 
 # Default project root is two levels above this script (infra/scripts/ → project root)
@@ -114,8 +115,9 @@ ALL_SERVICES = FRONTEND_SERVICES + BACKEND_SERVICES  # frontend first (matches m
 # ---------------------------------------------------------------------------
 print()
 print("Checking required tools...")
-if subprocess.run(["which", "kubectl"], capture_output=True).returncode != 0:
-    die("kubectl not found.")
+if shutil.which("kubectl") is None:
+    die("kubectl not found in PATH.")
+log("kubectl found.")
 log("kubectl found.")
 
 # ---------------------------------------------------------------------------
@@ -141,7 +143,7 @@ print(f"\n{CYAN}  NOTE: Enter your personal GitHub username, not the organizatio
 print(f"        This is used to replace placeholders in ArgoCD Application manifests.{NC}\n")
 
 GITHUB_USERNAME = prompt("GITHUB_USERNAME", "Your personal GitHub username",
-                         "<your-github-username>", "ravdsun")
+                         "<your-github-username>", "rishalisinghballia")
 
 default_gitops = os.path.join(DEFAULT_PROJECT_ROOT, "gitops")
 GITOPS_PATH     = prompt("GITOPS_PATH", "Local path to your gitops repo",
