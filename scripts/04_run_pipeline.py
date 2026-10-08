@@ -14,6 +14,7 @@ import os
 import subprocess
 import sys
 import time
+import shutil
 from datetime import datetime
 
 RED    = "\033[0;31m"
@@ -68,7 +69,9 @@ def prompt(var_name, label, example, default=""):
 # ---------------------------------------------------------------------------
 print()
 print("Checking required tools...")
-if subprocess.run(["which", "gh"], capture_output=True).returncode != 0:
+# if subprocess.run(["which", "gh"], capture_output=True).returncode != 0:
+#     die("gh CLI not found. Install from https://cli.github.com/ then run 'gh auth login'.")
+if shutil.which("gh") is None:
     die("gh CLI not found. Install from https://cli.github.com/ then run 'gh auth login'.")
 auth_out, auth_rc = run_cmd(["gh", "auth", "status"], capture=True, ok_fail=True)
 if auth_rc != 0:
@@ -88,7 +91,7 @@ print("  Each pipeline: builds → scans → pushes image to ECR → updates git
 print()
 
 GITHUB_ORG     = prompt("GITHUB_ORG",        "GitHub username or org that owns the repos",
-                        "<your-org>", "zenpharma")
+                        "<your-org>", "rishalipharma")
 FRONTEND_REPO  = prompt("FRONTEND_REPO",    "GitHub repo name for frontend",
                         "frontend", "frontend")
 BACKEND_REPO   = prompt("BACKEND_REPO",     "GitHub repo name for backend",
