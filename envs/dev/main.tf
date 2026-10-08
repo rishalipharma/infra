@@ -6,65 +6,65 @@ locals {
 
 data "aws_caller_identity" "current" {} 
 
-# module "vpc" {
-#   source = "../../modules/vpc"
+module "vpc" {
+  source = "../../modules/vpc"
 
-#   project               = local.project
-#   env                   = local.env
-#   region                = local.region
-#   vpc_cidr              = "10.0.0.0/16"
-#   public_subnet_cidrs    = ["10.0.1.0/24", "10.0.2.0/24"]
-#   private_subnet_cidrs  = ["10.0.3.0/24", "10.0.4.0/24"]
-#   database_subnet_cidrs = ["10.0.5.0/24", "10.0.6.0/24"]
+  project               = local.project
+  env                   = local.env
+  region                = local.region
+  vpc_cidr              = "10.0.0.0/16"
+  public_subnet_cidrs    = ["10.0.1.0/24", "10.0.2.0/24"]
+  private_subnet_cidrs  = ["10.0.3.0/24", "10.0.4.0/24"]
+  database_subnet_cidrs = ["10.0.5.0/24", "10.0.6.0/24"]
 
-# }
+}
 
 #Why locals instead of variables? These values (project name, env name, region) are fixed per environment 
 #and should never be overridden from the outside. locals makes them constants. 
 #variables are for values that change between runs (like database passwords).
 
-# module "eks" {
-#   source = "../../modules/eks"
+module "eks" {
+  source = "../../modules/eks"
 
-#   project            = local.project
-#   env                = local.env
-#   vpc_id             = module.vpc.vpc_id
-#   subnet_ids         = module.vpc.private_subnets
-#   instance_types     = ["t3.small"]
-#   min_size           = 3
-#   max_size           = 4
-#   desired_size       = 3
-# }
+  project            = local.project
+  env                = local.env
+  vpc_id             = module.vpc.vpc_id
+  subnet_ids         = module.vpc.private_subnets
+  instance_types     = ["t3.small"]
+  min_size           = 3
+  max_size           = 4
+  desired_size       = 3
+}
 
-# module "rds" {
-#   source = "../../modules/rds"
+module "rds" {
+  source = "../../modules/rds"
 
-#   project = local.project
-#   env = local.env
-#   username = "pharmaadmin"
-#   password = var.db_password
-#   vpc_id = module.vpc.vpc_id
-#   db_subnet_group_name = module.vpc.database_subnet_group_name
-#   eks_node_security_group_id = module.eks.node_security_group_id  
-# }
+  project = local.project
+  env = local.env
+  username = "pharmaadmin"
+  password = var.db_password
+  vpc_id = module.vpc.vpc_id
+  db_subnet_group_name = module.vpc.database_subnet_group_name
+  eks_node_security_group_id = module.eks.node_security_group_id  
+}
 
-# module "ecr" {
-#    source = "../../modules/ecr"
+module "ecr" {
+   source = "../../modules/ecr"
 
-#    project = local.project
-#    env = local.env
-#    repositories = [
-#     "api-gateway",
-#     "auth-service",
-#     "drug-catalog-service",
-#     "inventory-service",
-#     "manufacturing-service",
-#     "notification-service",
-#     "pharma-ui",
-#     "supplier-service",
-#     "qc-service",
-#    ]  
-# }
+   project = local.project
+   env = local.env
+   repositories = [
+    "api-gateway",
+    "auth-service",
+    "drug-catalog-service",
+    "inventory-service",
+    "manufacturing-service",
+    "notification-service",
+    "pharma-ui",
+    "supplier-service",
+    "qc-service",
+   ]  
+}
 
 module "iam" {
   source = "../../modules/iam"
